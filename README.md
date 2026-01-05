@@ -47,29 +47,14 @@
 
 ## 기술 스택
 
-### Backend (`url_backend`)
-
-- **언어**: Java 21
-- **프레임워크**: Spring Boot 3.5.4
-- **데이터베이스**: MySQL, H2 (테스트용)
-- **핵심 라이브러리**:
-    - **ORM**: Spring Data JPA
-    - **Query**: QueryDSL
-    - **Security**: Spring Security, JWT (JSON Web Tokens)
-    - **Caching**: Spring Cache (Ehcache)
-    - **기타**: Lombok
- 
-
-### Frontend (`url_frontend`)
-
-- **언어**: JavaScript (ES6+)
-- **프레임워크**: Vue.js 3
-- **빌드 도구**: Vite
-- **UI 라이브러리**: Vuetify, Tailwind CSS
-- **핵심 라이브러리**:
-    - **Routing**: Vue Router
-    - **HTTP Client**: Axios
-    - **Charts**: Chart.js
+| Category | Technology |
+| :--- | :--- |
+| **Language** | <img src="https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> |
+| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white"> |
+| **Database & Cache** | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/H2_Database-003B57?style=for-the-badge&logo=h2&logoColor=white"> <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> |
+| **Backend Tech** | <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> <br> <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> |
+| **Frontend UI & Libs** | <img src="https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=white"> <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <br> <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"> <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white"> |
+| **Tools** | <img src="https://img.shields.io/badge/Lombok-BC0230?style=for-the-badge&logo=lombok&logoColor=white"> |
 
  <br>
 
