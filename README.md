@@ -4,52 +4,15 @@
 
 이 프로젝트는 긴 URL을 짧고 관리하기 쉬운 URL로 변환해주는 웹 애플리케이션입니다.
 
-또한, 관리자 대시보드를 통해 URL 생성 통계 및 클릭 로그 분석 기능을 제공하여 URL을 관리할 수 있습니다.
+또한 관리자 대시보드를 통해 URL 생성 통계 및 클릭 로그 분석 기능을 제공하여 URL을 관리할 수 있습니다.
 
 <br>
-
-## 주요 기능
-
-- **URL 단축**: 긴 원본 URL을 고유하고 짧은 키를 가진 URL로 변환합니다.
-- **빠른 리디렉션**: 생성된 단축 URL로 접속 시, 즉시 원본 URL로 리디렉션됩니다.
-- **클릭 통계**: 단축 URL이 클릭될 때마다 관련 로그를 기록하여 통계를 추적합니다.
-- **관리자 대시보드**:
-    - 관리자 인증 (JWT 기반)
-    - 전체 URL 목록 조회
-    - URL별 클릭 통계 및 상세 로그 확인 (시간, IP 주소, User-Agent, 클릭 횟수 등)
- 
-<br>
-
-## 주요 화면
-
-
-### 메인 화면
-
-<img width="2832" height="1394" alt="image" src="https://github.com/user-attachments/assets/adfc0574-c17c-43e2-a1ea-71b1c37a76d1" />
-<br>
-<br>
-<img width="2816" height="1512" alt="image" src="https://github.com/user-attachments/assets/02efeb35-32ca-4d7d-a752-19922c71e256" />
-<br>
-<br>
-<img width="2812" height="1464" alt="image" src="https://github.com/user-attachments/assets/c4d2eb12-7fe6-4a7e-aa9d-18769d6f8ef9" />
-
-<br><br>
-
-
-### 관리자 로그인 화면
-<img width="2820" height="1386" alt="image" src="https://github.com/user-attachments/assets/540d0dc2-e8fa-43f6-b045-ecd0c6e288e6" />
-<br><br>
-
-### 백오피스 화면
-<img width="2876" height="1404" alt="image" src="https://github.com/user-attachments/assets/1e330cad-6167-4cdc-b977-e1ef59d28e77" />
-
-<br><br>
 
 ## 기술 스택
 
 | Category | Technology |
 | :--- | :--- |
-| **Language** | <img src="https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> |
+| **Language** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> |
 | **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white"> |
 | **Database & Cache** | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/H2_Database-003B57?style=for-the-badge&logo=h2&logoColor=white"> <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> |
 | **Backend Tech** | <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> <br> <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> |
@@ -63,7 +26,7 @@
 
 백엔드는 **도메인 중심의 패키지 구조**로 기능별 응집도를 높이고 다른 기능과의 결합도를 낮췄습니다.
 
-프로젝트는 크게 두 개의 최상위 패키지, **`feature`** 와 **`common`** 으로 나뉩니다.
+프로젝트는 크게 두 개의 최상위 패키지 **`feature`** 와 **`common`** 으로 나뉩니다.
 
 ```
 be/url_backend/
@@ -104,7 +67,7 @@ be/url_backend/
 #### **1. 배경**
 
 - URL 단축 서비스의 핵심 기능인 **리디렉션 API**는 특정 단축 URL을 원본 URL로 매핑하여 리디렉션을 수행.
-- 트래픽 특성상 일부 “핫 키(Hot Key(자주 이용되는 URL))“에 요청이 집중되는 현상이 발생.
+- 트래픽 특성상 일부 “핫 키(Hot Key, 자주 이용되는 URL)“에 요청이 집중되는 현상이 발생.
 - 초기 구현에서는 모든 요청이 DB를 조회해야 하므로 **DB 부하 증가와 응답 속도 저하** 문제가 발생.
 - 대량의 트래픽이 몰리는 부하 테스트 환경에서 TPS가 제한적으로 상승하는 한계가 관찰.
 
@@ -145,17 +108,17 @@ be/url_backend/
 
 <br>
 
-#### 캐시 적용 전
+### 캐시 적용 전
 <img width="2048" height="628" alt="image" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
 
 <br>
 
-#### 캐시 적용 후
+### 캐시 적용 후
 <img width="2048" height="614" alt="image" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
 
 <br><br>
 
-### 2. 복합 인덱스
+### 2. 복합 인덱스 적용 (조회 성능 65배 향상)
 
 > **특정 IP 클릭 통계 조회 – 복합 인덱스 적용 성능 최적화**
 
@@ -219,12 +182,12 @@ be/url_backend/
 
 <br>
 
-#### **인덱스 적용 전**
+### **인덱스 적용 전**
 <img width="2048" height="620" alt="image" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
 
 <br>
 
-#### **인덱스 적용 후**
+### **인덱스 적용 후**
 <img width="2048" height="609" alt="image" src="https://github.com/user-attachments/assets/0e04d1de-a9f0-46c9-802b-308f08b96fb7" />
 
 <br><br>
@@ -271,17 +234,17 @@ be/url_backend/
 
 <br>
 
-#### **비동기 적용 전**
+### **비동기 적용 전**
 <img width="2048" height="610" alt="image" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
 
 <br>
 
-**한 작업을 끝내는 데 필요한 전체 시간**
+### **한 작업을 끝내는 데 필요한 전체 시간**
 <img width="2048" height="1035" alt="image" src="https://github.com/user-attachments/assets/1760975d-0807-4752-af33-af8e88777726" />
 
 <br>
 
-#### **비동기 적용 후**
+### **비동기 적용 후**
 <img width="2048" height="631" alt="image" src="https://github.com/user-attachments/assets/966d54c2-2dda-4312-94eb-24d3d381396a" />
 
 
@@ -291,9 +254,54 @@ be/url_backend/
 
 ### 4. OSIV (Open Session In View)
 
-Spring Boot의 기본 설정인 OSIV(open-in-view: true)가 불필요하게 데이터베이스 커넥션을 요청 시작부터 응답 완료 시점까지 점유하여, 트래픽 증가 시 잠재적인 성능 저하 및 장애를 유발할 수 있는 위험을 인지.
+Spring Boot의 기본 설정인 OSIV(open-in-view: true)가 불필요하게 데이터베이스 커넥션을 요청 시작부터 응답 완료 시점까지 점유하여 트래픽 증가 시 잠재적인 성능 저하 및 장애를 유발할 수 있는 위험을 인지.
 
-이에 `spring.jpa.open-in-view` 옵션을 `false`로 명시적으로 비활성화하여, 트랜잭션이 실행되는 서비스 계층 내에서만 DB 커넥션을 사용하도록 정책을 변경.
-이 과정에서 발생할 수 있는 `LazyInitializationException`은 DTO 변환 로직을 철저히 적용하여 해결, 이를 통해 컨트롤러 계층과 영속성 계층을 명확히 분리.
+이에 `spring.jpa.open-in-view` 옵션을 `false`로 명시적으로 비활성화하여 트랜잭션이 실행되는 서비스 계층 내에서만 DB 커넥션을 사용하도록 정책을 변경.
+이 과정에서 발생할 수 있는 `LazyInitializationException`은 DTO 변환 로직을 철저히 적용하여 해결했으며, 이를 통해 컨트롤러 계층과 영속성 계층을 명확히 분리.
+
+<br>
+
+### [OSIV 설정 변경에 따른 커넥션 점유 구간 변화]
+
+<br>
+
+<img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/f184a014-49ea-48eb-9737-3a3a75e1cc58" />
 
 --- 
+
+<details><summary><h2>주요 기능 및 화면</h2></summary>
+<div markdown="1">
+
+### 주요 기능
+
+- **URL 단축**: 긴 원본 URL을 고유하고 짧은 키를 가진 URL로 변환합니다.
+- **빠른 리디렉션**: 생성된 단축 URL로 접속 시, 즉시 원본 URL로 리디렉션됩니다.
+- **클릭 통계**: 단축 URL이 클릭될 때마다 관련 로그를 기록하여 통계를 추적합니다.
+- **관리자 대시보드**:
+    - 관리자 인증 (JWT 기반)
+    - 전체 URL 목록 조회
+    - URL별 클릭 통계 및 상세 로그 확인 (시간, IP 주소, User-Agent, 클릭 횟수 등)
+
+<br>
+
+### 메인 화면
+
+<img width="2832" height="1394" alt="image" src="https://github.com/user-attachments/assets/adfc0574-c17c-43e2-a1ea-71b1c37a76d1" />
+<br>
+<br>
+<img width="2816" height="1512" alt="image" src="https://github.com/user-attachments/assets/02efeb35-32ca-4d7d-a752-19922c71e256" />
+<br>
+<br>
+<img width="2812" height="1464" alt="image" src="https://github.com/user-attachments/assets/c4d2eb12-7fe6-4a7e-aa9d-18769d6f8ef9" />
+
+<br><br>
+
+
+### 관리자 로그인 화면
+<img width="2820" height="1386" alt="image" src="https://github.com/user-attachments/assets/540d0dc2-e8fa-43f6-b045-ecd0c6e288e6" />
+<br><br>
+
+### 백오피스 화면
+<img width="2876" height="1404" alt="image" src="https://github.com/user-attachments/assets/1e330cad-6167-4cdc-b977-e1ef59d28e77" />
+</div>
+</details>
