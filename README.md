@@ -1,32 +1,51 @@
-# URL Shortener Service
+# [PerfUrl] 데이터 기반 성능 최적화: URL 단축 서비스
 
-## 프로젝트 소개
+> **핵심 가치**
+> * URL 단축 도메인을 활용해 대용량 트래픽 환경을 가정하고 **성능 튜닝(Caching, Indexing, Async) 효과를 정량적으로 검증**한 엔지니어링 프로젝트입니다.
 
-이 프로젝트는 긴 URL을 짧고 관리하기 쉬운 URL로 변환해주는 웹 애플리케이션입니다.
+> **핵심 성과 요약 (Local Test Env)**
+> * **조회 성능:** 복합 인덱스(Composite Index) 적용으로 통계 조회 쿼리 속도 **0.2s → 0.003s (약 65배 개선)**
+> * **응답 속도:** `Ehcache` 로컬 캐시 적용으로 리디렉션 응답 시간 **7% 단축** 및 TPS **10% 향상**
+> * **처리량 증대:** 로그 저장 로직 비동기(`@Async`) 전환으로 쓰기 병목 제거 및 Peak TPS **13.4% 증가**
+> 
+> 
 
-또한 관리자 대시보드를 통해 URL 생성 통계 및 클릭 로그 분석 기능을 제공하여 URL을 관리할 수 있습니다.
+<br><br>
 
-<br>
+## 1. 프로젝트 소개
 
-## 기술 스택
+**[PerfUrl]** 은 긴 URL을 단축 URL로 변환하고 접속 통계를 시각화하는 웹 서비스입니다. 
 
-| Category | Technology |
-| :--- | :--- |
-| **Language** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> |
-| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white"> |
-| **Database & Cache** | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/H2_Database-003B57?style=for-the-badge&logo=h2&logoColor=white"> <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> |
-| **Backend Tech** | <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> <br> <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> |
-| **Frontend UI** | <img src="https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=white"> <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <br> <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"> <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white"> |
-| **DevOps & Infra** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> |
-| **Test & Monitor** | <img src="https://img.shields.io/badge/nGrinder-FFA500?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Scouter-00C7B7?style=for-the-badge&logo=scouter&logoColor=white"> <img src="https://img.shields.io/badge/Lombok-BC0230?style=for-the-badge&logo=lombok&logoColor=white"> |
+기능 구현을 넘어 백엔드 필수 **CS 지식(DB 인덱스, 캐시 전략, 비동기 처리)이 실제 애플리케이션 성능에 미치는 영향을 nGrinder로 직접 측정하고 분석**하는 데 집중했습니다.
 
- <br>
+### 주요 기능
 
-## 백엔드 아키텍처
+* **Core:** Base62 알고리즘 기반 URL 단축 및 리디렉션
+* **Analytics:** 접속 IP, 날짜, User-Agent 기반 상세 클릭 통계 제공
+* **Admin:** JWT 인증 기반 관리자 대시보드 (Chart.js 시각화)
 
-백엔드는 **도메인 중심의 패키지 구조**로 기능별 응집도를 높이고 다른 기능과의 결합도를 낮췄습니다.
+<br><br>
 
-프로젝트는 크게 두 개의 최상위 패키지 **`feature`** 와 **`common`** 으로 나뉩니다.
+## 2. 기술 스택
+
+| Category | Technology | Reason for Selection |
+| :--- | :--- | :--- |
+| **Language** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> | LTS 버전의 안정성을 확보하고 Record 패턴 등을 활용해 코드 간결성 향상 |
+| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.x-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> | 풍부한 레퍼런스를 통한 개발 생산성 확보 및 관리자 대시보드 UI의 효율적 구현 |
+| **Database & ORM** | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <br> <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> | 객체 지향적인 데이터 접근과 QueryDSL을 통한 컴파일 시점의 쿼리 오류 방지 |
+| **Caching** | <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> | 별도 인프라 구축 없이 네트워크 비용이 없는 Local Cache로 조회 성능 최적화 |
+| **DevOps & Infra** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> | 개발/운영 환경의 불일치를 해결하고 반복적인 배포 과정을 자동화하여 개발 효율 증대 |
+| **Test & Monitor** | <img src="https://img.shields.io/badge/nGrinder-FFA500?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Scouter-00C7B7?style=for-the-badge&logo=scouter&logoColor=white"> | 실제 트래픽 환경을 모방하여 TPS, Latency 등 정량적 지표를 기반으로 병목 구간 파악 |
+
+<br><br>
+
+## 3. 아키텍처 및 인프라 진화
+
+### 백엔드 패키지 구조
+
+기능 응집도를 높이고자 계층형 대신 **도메인형 패키지 구조**를 채택했습니다. 
+
+`feature`(비즈니스 로직)와 `common`(공통 모듈)을 분리해 유지보수 효율을 확보했습니다.
 
 ```
 be/url_backend/
@@ -44,134 +63,76 @@ be/url_backend/
     └── util/         # 공통 유틸리티
 ```
 
-
-<img width="1866" height="1148" alt="image" src="https://github.com/user-attachments/assets/6b54ee04-bc11-47a9-a1a6-cffbe0fac301" />
-
+<img width="100%" height="1148" alt="image" src="https://github.com/user-attachments/assets/6b54ee04-bc11-47a9-a1a6-cffbe0fac301" />
 
 <br><br>
 
-## 서비스 아키텍처
+### 서비스 아키텍처
 
-<img width="1859" height="1054" alt="image" src="https://github.com/user-attachments/assets/b1586b83-5b48-44a8-8b6f-314e01db432a" />
+#### 3-1. 인프라 아키텍처 진화
 
-<br><br>
+기술적 학습을 위해 **"비용 효율적인 단일 인스턴스"** 에서 **"확장 가능한 분산 환경"** 으로 아키텍처를 확장하여 설계했습니다.
 
-## 성능 최적화
+#### [Step 1] 단일 인스턴스 최적화
+- **구성:** EC2(t3.micro) + Docker + **Ehcache(Local)**
+- **특징:** 네트워크 I/O가 없는 로컬 캐시(Ehcache)를 활용해 **최대 성능**을 확보했습니다.
+- **한계:** 서버 장애 시 단일 장애 지점 위험이 존재합니다.
 
-대용량 트래픽 환경에서도 안정적인 서비스를 제공하기 위해 다음과 같은 성능 최적화를 진행했습니다.
+#### [Step 2] 고가용성 분산 환경 설계
+- **목표:** 트래픽 증가에 유연하게 대응하고 무중단 배포가 가능한 인프라 구축
+- **구성:** AWS VPC, Auto Scaling Group, ALB, RDS (Multi-AZ)
+- **설계 의도:**
+    - **Traffic Handling:** ALB와 Auto Scaling을 통해 부하를 분산.
+    - **HA:** Multi-AZ RDS 구성을 통해 데이터베이스 가용성 확보.
+    - **CI/CD:** GitHub Actions와 CodeDeploy를 연동한 자동화 파이프라인 구축.
+    - **(본 아키텍처 적용 시 Local Cache(Ehcache)의 데이터 불일치 문제를 해결하기 위해 Redis(Global Cache)로의 마이그레이션이 필수적임을 인지하고 설계했습니다.)**
 
-### 1. 캐싱 (Ehcache)
-
-> **URL 리디렉션 API – Ehcache 적용 성능 최적화**
-
-#### **1. 배경**
-
-- URL 단축 서비스의 핵심 기능인 **리디렉션 API**는 특정 단축 URL을 원본 URL로 매핑하여 리디렉션을 수행.
-- 트래픽 특성상 일부 “핫 키(Hot Key, 자주 이용되는 URL)“에 요청이 집중되는 현상이 발생.
-- 초기 구현에서는 모든 요청이 DB를 조회해야 하므로 **DB 부하 증가와 응답 속도 저하** 문제가 발생.
-- 대량의 트래픽이 몰리는 부하 테스트 환경에서 TPS가 제한적으로 상승하는 한계가 관찰.
-
----
-
-#### **2. 원인 분석**
-
-- URL 리디렉션 API는 **조회 성격**이 강해 동일한 키가 반복적으로 요청됨.
-- 그러나 DB를 매번 조회하는 구조로 인해:
-    - **DB Connection Pool 소진 위험**
-    - **네트워크 및 디스크 I/O 오버헤드 증가**
-    - **사용자 응답 지연**
-- 자주 호출되는 데이터조차 캐싱하지 않아 **중복 쿼리 실행**이 성능 저하의 직접적 원인임을 확인.
-
----
-
-#### **3. 해결 과정 및 기술적 결정**
-
-- **1단계: Ehcache 적용**
-    - 자주 사용되는 단축 URL → 원본 URL 매핑 데이터를 **Ehcache(Local Cache)** 에 저장.
-    - API 호출 시 DB를 조회하기 전에 캐시를 우선 확인하여 **Cache Hit 시 DB 접근 차단**.
-- **2단계: 캐시 전략 설계**
-    - **LRU** 정책 기반 캐시 만료 전략 적용.
-    - 핫 키 특성을 고려하여 캐시 용량을 확보.
-- **3단계: 부하 테스트 (nGrinder + Scouter)**
-    - 실제 트래픽 패턴을 반영: 전체 키 중 10%를 “핫 키”로 지정, 이들에 전체 트래픽의 80% 집중.
-
----
-
-#### **4. 정량적 성과 (nGrinder 부하 테스트 결과)**
-
-| **지표** | **캐시 적용 전** | **캐시 적용 후** | **개선 효과** |
-| --- | --- | --- | --- |
-| **TPS (평균 처리량)** | 1,184.5 | **1,301.9** | **약 9.9% 향상** |
-| **Peak TPS (최대 처리량)** | 1,481.5 | **1,718.5** | **약 16.0% 향상** |
-| **Mean Test Time (평균 응답 시간)** | 39.84ms | **37.04ms** | **약 7.0% 단축** |
-| **Executed Tests (총 처리 건수)** | 137,858 | **154,194** | **약 11.8% 증가** |
-
-<br>
-
-### 캐시 적용 전
-<img width="2048" height="628" alt="image" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
-
-<br>
-
-### 캐시 적용 후
-<img width="2048" height="614" alt="image" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
+<img width="100%" height="1054" alt="image" src="https://github.com/user-attachments/assets/b1586b83-5b48-44a8-8b6f-314e01db432a" />
 
 <br><br>
 
-### 2. 복합 인덱스 적용 (조회 성능 65배 향상)
+## 4. 성능 고도화
 
-> **특정 IP 클릭 통계 조회 – 복합 인덱스 적용 성능 최적화**
+**"가설 → 검증"** 프로세스에 따라 문제를 정의하고 부하 테스트로 검증했습니다.
 
-#### **1. 배경**
+* **Test Environment:** (Mac)Local, Docker Container, nGrinder
+* **Target:** 임시 데이터 50만 건, 가상 사용자 접속 상황
 
-- 대용량 데이터 환경을 가정하여 **임시 데이터 500,000건**을 삽입하고 테스트 진행.
-- **특정 IP**와 **기간 조건**으로 조회 시 **쿼리 응답 속도가 매우 느려짐**을 확인.
-- EXPLAIN 실행 결과, 해당 쿼리가 **풀 테이블 스캔**으로 동작함을 확인.
-    
+<br><br>
+
+### [Phase 1] 복합 인덱스로 조회 성능 65배 개선
+
+**Q. 약 50만 건의 로그 데이터 조회 시 왜 0.2초나 소요되는가?**
+
+* **문제 정의:** `EXPLAIN` 실행 결과 `type: ALL` (Full Table Scan) 발생. 단일 인덱스만으로는 다중 조건(`ip`, `date`) 필터링 시 데이터 추출 효율 급감 확인.
     ```sql
     EXPLAIN SELECT * FROM click_log
     WHERE ip_address = '192.168.0.50' AND created_at BETWEEN '2025-05-10' AND '2025-05-17';
     ```
     
-    <img width="1266" height="134" alt="image" src="https://github.com/user-attachments/assets/234dda02-aedb-4d4c-9fec-762d125528ad" />
+    <img width="80%" height="100" alt="image" src="https://github.com/user-attachments/assets/234dda02-aedb-4d4c-9fec-762d125528ad" /> <br>
 
----
+<br>
 
-#### **2. 원인 분석**
+* **해결 전략:** 카디널리티가 높은 `ip_address`와 조회 범위가 넓은 `created_at`을 결합한 **복합 인덱스** 생성.
+  ```sql
+  CREATE INDEX idx_ip_created ON click_log (ip_address, created_at);
+  ```
+  <img width="80%" height="100" alt="image" src="https://github.com/user-attachments/assets/5ff3bed5-9a74-437d-ad70-2fe8fecfd8f8" />
+  <br>
+  <br>
 
-- 두 조건이 함께 자주 사용되지만, 인덱스 부재로 인해 전체 데이터(50만 건)를 스캔.
-- 결과적으로 **쿼리 응답 시간 지연 및 대량 요청 시 TPS 저하**가 발생.
-
----
-
-#### **3. 해결 과정 및 기술적 결정**
-
-- **1단계: 복합 인덱스 생성**
-    - **카디널리티**가 높은 ip_address와 created_at을 조합하여 복합 인덱스를 생성.
-        
-        ```sql
-        CREATE INDEX idx_ip_created ON click_log (ip_address, created_at);
-        ```
-        
-- **2단계: 인덱스 활용 검증**
-    - EXPLAIN 실행 결과, 풀 테이블 스캔 → **인덱스 범위 스캔**으로 전환됨을 확인.
-        
-        <img width="1434" height="134" alt="image" src="https://github.com/user-attachments/assets/5ff3bed5-9a74-437d-ad70-2fe8fecfd8f8" />
-
-        
     - MySQL Profiling 결과:
         - **0.21887s → 0.003725s {98}% 개선**
+       <img width="373" height="352" alt="image" src="https://github.com/user-attachments/assets/101231e1-fde9-4a61-8014-3c56a5a024cc" />
             
-            <img width="772" height="752" alt="image" src="https://github.com/user-attachments/assets/101231e1-fde9-4a61-8014-3c56a5a024cc" />
+* **검증 결과 및 판단 근거:**
+  - **결과:** 쿼리 실행 시간 **0.218s → 0.003s (98% 단축)**, nGrinder TPS **25.4 → 1,654.8** 달성.
+  - **판단 근거:** 인덱스 유지에 따른 **쓰기 비용**보다 대량의 로그 데이터를 반복 조회하는 관리자 페이지의 응답 속도 확보가 비즈니스적으로 더 높은 가치를 지닌다고 판단했습니다.
 
+<br>
 
-- **3단계: 대량 요청 환경 부하 테스트 (nGrinder + Scouter)**
-    - 단일 쿼리 실행만으로는 체감이 크지 않았으나, 대량 동시 요청 시 TPS 및 응답 시간 개선 효과가 뚜렷하게 나타남.
-    - 인덱스 적용 후, 동일 자원으로 훨씬 많은 요청을 처리 가능함을 검증.
-
----
-
-#### **4. 정량적 성과 (nGrinder 부하 테스트 결과)**
+* **정량적 성과 (nGrinder 부하 테스트 결과)**
 
 | **지표** | **최적화 이전** | **최적화 이후** | **개선 효과** |
 | --- | --- | --- | --- |
@@ -180,7 +141,7 @@ be/url_backend/
 | **Mean Test Time (평균 응답 시간)** | 386.81ms | **5.43ms** | **약 98% 단축** |
 | **Executed Tests (총 처리 건수)** | 2,949 | **192,522** | **약 65배 증가** |
 
-<br>
+<details><summary><h3> [펼치기] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
 
 ### **인덱스 적용 전**
 <img width="2048" height="620" alt="image" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
@@ -190,40 +151,56 @@ be/url_backend/
 ### **인덱스 적용 후**
 <img width="2048" height="609" alt="image" src="https://github.com/user-attachments/assets/0e04d1de-a9f0-46c9-802b-308f08b96fb7" />
 
+</div> </details>
+
 <br><br>
 
-### 3. 비동기 처리 (@Async)
+### [Phase 2] Ehcache 도입을 통한 응답 속도 향상
 
-> **URL 리디렉션 API – 비동기 처리(@Async) 적용 성능 최적화**
+**Q. "Hot URL" 리디렉션 요청마다 DB I/O를 발생시켜야 하는가?**
 
-#### **1. 배경**
+* **문제 정의:** 특정 인기 URL(Hot Key)에 전체 트래픽의 상당 부분이 집중되는 '요청 편중 현상' 발생. 매번 DB를 조회하는 구조는 중복 쿼리 실행으로 인한 자원 낭비와 응답 속도 저하를 야기함.
+* **해결 전략:** JVM 힙 메모리 기반 **Ehcache** 적용. 자주 찾는 URL은 메모리에서 즉시 반환(LRU 정책)하도록 구성.
+* **검증 결과 및 판단 근거:**
+* **결과:** 평균 응답 시간 **39ms → 37ms (7% 개선)** 확인.
+  - **Trade-off:** 로컬 캐시는 서버 간 데이터 정합성 문제가 발생할 수 있으나 현재 단일 서버 구조에서는 네트워크 비용이 없는 최적의 선택지라 판단했습니다.
+  - **분석:** DB와 애플리케이션이 동일한 localhost에서 동작하여 **네트워크 지연**이 거의 없는 환경이었습니다. 이로 인해 캐싱을 통한 I/O 비용 절감 효과보다 테스트 도구와 앱 간의 CPU/Context Switching 경합이 전체 TPS의 임계점으로 작용했습니다.
+   - 서버와 DB가 분리된 AWS RDS 고가용성 환경에서는 네트워크 왕복 비용이 발생하므로 더 극적인 수치가 나올것을 인지.
 
-- URL 단축 서비스의 리디렉션 API는 **사용자가 단축 URL을 호출할 때, 원본 URL로 리디렉션 처리**를 담당하는 핵심 기능.
-- 기존 구현에서는 리디렉션 시점에 **클릭 로그 저장 및 통계 업데이트를 동기적으로 처리**하여, 불필요한 응답 지연이 발생.
-- 특히 대량 요청 환경에서 로그 처리 로직이 **API 병목**으로 작용하여 응답 속도와 TPS 모두 한계에 부딪힘.
+* **정량적 성과 (nGrinder 부하 테스트 결과)**
 
----
+| **지표** | **캐시 적용 전** | **캐시 적용 후** | **개선 효과** |
+| --- | --- | --- | --- |
+| **TPS (평균 처리량)** | 1,184.5 | **1,301.9** | **약 9.9% 향상** |
+| **Peak TPS (최대 처리량)** | 1,481.5 | **1,718.5** | **약 16.0% 향상** |
+| **Mean Test Time (평균 응답 시간)** | 39.84ms | **37.04ms** | **약 7.0% 단축** |
+| **Executed Tests (총 처리 건수)** | 137,858 | **154,194** | **약 11.8% 증가** |
 
-#### **2. 원인 분석**
+<details><summary><h3> [펼치기] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
 
-- **동기 처리 구조 문제**:
-    - 리디렉션 처리와 동시에 클릭 로그 저장(DB I/O)을 수행.
-    - DB I/O는 네트워크/디스크 지연이 발생하기 때문에 사용자 요청 응답 시간을 불필요하게 증가시킴.
+### 캐시 적용 전
+<img width="2048" height="628" alt="image" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
 
----
+<br>
 
-#### **3. 해결 과정 및 기술적 결정**
+### 캐시 적용 후
+<img width="2048" height="614" alt="image" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
 
-- **1단계: 비동기 처리 도입 (@Async)**
-    - Spring의 @Async를 활용하여 **클릭 로그 저장 및 통계 업데이트 로직을 비동기 처리**.
-    - API 응답은 즉시 반환하고, 부수적인 작업은 별도 스레드 풀에서 처리 → **사용자 대기 시간 최소화**.
-- **2단계: 부하 테스트 (nGrinder + Scouter)**
-    - 실제 트래픽 환경을 가정한 부하 테스트 진행.
-    - TPS, 평균 응답 시간, 실행된 테스트 건수에서 개선 효과를 정량적으로 검증.
+</div> </details>
 
----
+<br>
 
-#### **4. 정량적 성과 (nGrinder 부하 테스트 결과)**
+### [Phase 3] @Async 비동기 처리로 사용자 대기 시간 최소화
+
+**Q. 통계 로그 저장이 늦어져 리디렉션 응답까지 지연되는 것이 타당한가?**
+
+* **문제 정의:** 리디렉션(Core)과 로그 저장(Sub)이 단일 트랜잭션에 묶여 있어 로그 기록 중 발생하는 DB 지연이 사용자 경험을 직접적으로 저해함.
+* **해결 전략:** Spring `@Async`를 적용하여 로그 저장을 별도 스레드로 분리.
+* **검증 결과 및 판단 근거:**
+  - **결과:** Peak TPS **13.4% 증가(1,585 → 1,798)** 달성.
+  - **판단 근거:** 사용자는 로그 저장 성공 여부와 관계없이 즉시 원본 사이트로 이동해야 합니다. 데이터 정합성보다 응답 속도가 우선인 도메인 특성을 고려해 비동기 처리를 적용했습니다.
+
+* **정량적 성과 (nGrinder 부하 테스트 결과)**
 
 | **지표** | **비동기 적용 전** | **비동기 적용 후** | **개선 효과** |
 | --- | --- | --- | --- |
@@ -232,7 +209,7 @@ be/url_backend/
 | **Mean Test Time (평균 응답 시간)** | 7.77ms | **7.10ms** | **약 8.6% 단축** |
 | **Executed Tests (총 처리 건수)** | 133,013 | **148,226** | **약 11.4% 증가** |
 
-<br>
+<details><summary><h3> [펼치기] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
 
 ### **비동기 적용 전**
 <img width="2048" height="610" alt="image" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
@@ -247,40 +224,50 @@ be/url_backend/
 ### **비동기 적용 후**
 <img width="2048" height="631" alt="image" src="https://github.com/user-attachments/assets/966d54c2-2dda-4312-94eb-24d3d381396a" />
 
-
 <img width="2048" height="1035" alt="image" src="https://github.com/user-attachments/assets/19bab646-549e-474b-8042-71c698daa56f" />
+
+</div> </details>
 
 <br><br>
 
-### 4. OSIV (Open Session In View)
+## 5. 설계 회고 및 한계 분석
 
-Spring Boot의 기본 설정인 OSIV(open-in-view: true)가 불필요하게 데이터베이스 커넥션을 요청 시작부터 응답 완료 시점까지 점유하여 트래픽 증가 시 잠재적인 성능 저하 및 장애를 유발할 수 있는 위험을 인지.
+### 1. 분산 환경에서의 캐시 정합성 (Local vs Global)
 
-이에 `spring.jpa.open-in-view` 옵션을 `false`로 명시적으로 비활성화하여 트랜잭션이 실행되는 서비스 계층 내에서만 DB 커넥션을 사용하도록 정책을 변경.
-이 과정에서 발생할 수 있는 `LazyInitializationException`은 DTO 변환 로직을 철저히 적용하여 해결했으며, 이를 통해 컨트롤러 계층과 영속성 계층을 명확히 분리.
+**설계 전략**: 단일 머신 환경에서 네트워크 비용이 없는 Ehcache를 통해 응답 속도를 최적화했습니다.
+* **한계:** 서버 다중화 시 인스턴스 간 데이터 불일치가 발생합니다.
+* **개선안:** 향후 확장성을 고려한다면 **Redis**와 같은 Global Cache를 도입해 데이터 정합성을 확보해야 함을 인지했습니다.
 
-<br>
+### 2. 비동기 처리의 데이터 유실 리스크
 
-### [OSIV 설정 변경에 따른 커넥션 점유 구간 변화]
+**구현 방식**: 사용자 경험을 최우선으로 하여 @Async 기반의 비동기 로그 저장 로직을 구축했습니다.
+* **한계:** 애플리케이션 장애나 스레드 풀 고갈 시 통계 데이터가 유실될 위험이 있습니다.
+* **개선안:** 데이터 유실 방지가 중요한 경우 **Kafka** 등 메시지 브로커를 도입해 메시지 영속성을 확보하는 구조로 고도화할 계획입니다.
 
-<br>
+### 3. DB 커넥션 가용성 확보 (OSIV 비활성화)
+* **채택 근거**: OSIV가 활성화된 경우 API 응답 시점까지 DB 커넥션을 점유하여, 고부하 상황에서 커넥션 풀 고갈을 유발할 수 있음을 인지했습니다.
+* **적용 내용**: spring.jpa.open-in-view를 false로 설정해 커넥션 반환 시점을 앞당겼습니다. 지연 로딩 문제는 서비스 계층 내 DTO 변환을 통해 해결하여 시스템 전반의 자원 관리 효율을 높였습니다.
 
-<img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/f184a014-49ea-48eb-9737-3a3a75e1cc58" />
+<img width="80%" height="500" alt="image" src="https://github.com/user-attachments/assets/f184a014-49ea-48eb-9737-3a3a75e1cc58" />
+
+
+<br><br>
+
+## 6. 설치 및 실행
+
+*(※ 현재 AWS 배포는 중단 상태이며 아래 명령어로 로컬 실행 가능함)*
+
+```bash
+# Clone Repository
+git clone https://github.com/UrlOps/perfurl-backend.git
+
+```
+
 
 --- 
 
-<details><summary><h2>주요 기능 및 화면</h2></summary>
+<details><summary><h2> [펼치기] 프로젝트 화면 확인 </h2></summary>
 <div markdown="1">
-
-### 주요 기능
-
-- **URL 단축**: 긴 원본 URL을 고유하고 짧은 키를 가진 URL로 변환합니다.
-- **빠른 리디렉션**: 생성된 단축 URL로 접속 시, 즉시 원본 URL로 리디렉션됩니다.
-- **클릭 통계**: 단축 URL이 클릭될 때마다 관련 로그를 기록하여 통계를 추적합니다.
-- **관리자 대시보드**:
-    - 관리자 인증 (JWT 기반)
-    - 전체 URL 목록 조회
-    - URL별 클릭 통계 및 상세 로그 확인 (시간, IP 주소, User-Agent, 클릭 횟수 등)
 
 <br>
 
