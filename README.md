@@ -63,15 +63,13 @@ be/url_backend/
     └── util/         # 공통 유틸리티
 ```
 
-<img width="100%" height="1148" alt="image" src="https://github.com/user-attachments/assets/6b54ee04-bc11-47a9-a1a6-cffbe0fac301" />
-
 <br><br>
 
-### 서비스 아키텍처
+## 서비스 아키텍처
 
 > 기술적 학습을 위해 **"비용 효율적인 단일 인스턴스"** 에서 **"확장 가능한 분산 환경"** 으로 아키텍처를 확장하여 설계했습니다.
 
-#### 3-1. 인프라 아키텍처 진화
+### 3-1. 인프라 아키텍처 진화
 
 #### [Step 1] 단일 인스턴스 최적화
 - **구성:** EC2(t3.micro) + Docker + **Ehcache(Local)**
@@ -88,6 +86,43 @@ be/url_backend/
     - **(본 아키텍처 적용 시 Local Cache(Ehcache)의 데이터 불일치 문제를 해결하기 위해 Redis(Global Cache)로의 마이그레이션이 필수적임을 인지하고 설계했습니다.)**
 
 <img width="100%" height="1054" alt="image" src="https://github.com/user-attachments/assets/b1586b83-5b48-44a8-8b6f-314e01db432a" />
+
+<br><br>
+
+### 3-2. 핵심 요청 처리 흐름
+
+대용량 트래픽 환경에서 **응답 속도를 최소화**하기 위해, **Caching(Read)** 과 **Async(Write)** 전략을 요청 흐름의 적재적소에 배치했습니다.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server as API Server
+    participant Cache as Ehcache (Local)
+    participant DB as MySQL
+    participant Async as Async Thread
+
+    Note over Client, Server: [GET] /ShortURL (리디렉션 요청)
+
+    Client->>Server: 1. 단축 URL 접속 요청
+    Server->>Cache: 2. 캐시 조회 (Key: ShortURL)
+    
+    alt Cache Hit (메모리 적중)
+        Cache-->>Server: 원본 URL 반환 (Fast Path)
+    else Cache Miss (DB 조회)
+        Server->>DB: 3. 원본 URL 조회
+        DB-->>Server: 원본 URL 반환
+        Server->>Cache: 캐시 적재 (Write Back)
+    end
+
+    Server-->>Client: 302 Redirect (원본 URL)
+    
+    par Non-Blocking Logging
+        Server->>Async: 4. 접속 로그 저장 요청 (@Async)
+        Async->>DB: INSERT click_log (비동기 처리)
+    end
+```
+
+
 
 <br><br>
 
