@@ -31,7 +31,7 @@
 | Category | Technology | Reason for Selection |
 | :--- | :--- | :--- |
 | **Language** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> | LTS 버전의 안정성을 확보하고 Record 패턴 등을 활용해 코드 간결성 향상 |
-| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.5.4-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> | 풍부한 레퍼런스를 통한 개발 생산성 확보 및 관리자 대시보드 UI의 효율적 구현 |
+| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.x-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> | 풍부한 레퍼런스를 통한 개발 생산성 확보 및 관리자 대시보드 UI의 효율적 구현 |
 | **Database & ORM** | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <br> <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> | 객체 지향적인 데이터 접근과 QueryDSL을 통한 컴파일 시점의 쿼리 오류 방지 |
 | **Caching** | <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> | 별도 인프라 구축 없이 네트워크 비용이 없는 Local Cache로 조회 성능 최적화 |
 | **DevOps & Infra** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> | 개발/운영 환경의 불일치를 해결하고 반복적인 배포 과정을 자동화하여 개발 효율 증대 |
@@ -47,12 +47,12 @@
 
 ### 3-1. 인프라 아키텍처 진화
 
-#### [Step 1] 단일 인스턴스 최적화
+#### [ Step 1 ] 단일 인스턴스 최적화
 - **구성:** EC2(t3.micro) + Docker + **Ehcache(Local)**
 - **특징:** 네트워크 I/O가 없는 로컬 캐시(Ehcache)를 활용해 **최대 성능**을 확보했습니다.
 - **한계:** 서버 장애 시 단일 장애 지점 위험이 존재합니다.
 
-#### [Step 2] 고가용성 분산 환경 설계
+#### [ Step 2 ] 고가용성 분산 환경 설계
 - **목표:** 트래픽 증가에 유연하게 대응하고 무중단 배포가 가능한 인프라 구축
 - **구성:** AWS VPC, Auto Scaling Group, ALB, RDS (Multi-AZ)
 - **설계 의도:**
@@ -133,7 +133,7 @@ be/url_backend/
 
 <br><br>
 
-### [Phase 1] 복합 인덱스로 조회 성능 65배 개선
+### [ Phase 1 ] 복합 인덱스로 조회 성능 65배 개선
 
 **Q. 약 50만 건의 로그 데이터 조회 시 왜 0.2초나 소요되는가?**
 
@@ -174,7 +174,7 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 386.81ms | **5.43ms** | **약 98% 단축** |
     | **Executed Tests (총 처리 건수)** | 2,949 | **192,522** | **약 65배 증가** |
 
-<details><summary><h3> [펼치기] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
+<details><summary><h3> [ 펼치기 ] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
 
 ### **인덱스 적용 전**
 <img width="2048" height="620" alt="image" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
@@ -188,7 +188,7 @@ be/url_backend/
 
 <br><br>
 
-### [Phase 2] Ehcache 도입을 통한 응답 속도 향상
+### [ Phase 2 ] Ehcache 도입을 통한 응답 속도 향상
 
 **Q. "Hot URL" 리디렉션 요청마다 DB I/O를 발생시켜야 하는가?**
 
@@ -209,7 +209,7 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 39.84ms | **37.04ms** | **약 7.0% 단축** |
     | **Executed Tests (총 처리 건수)** | 137,858 | **154,194** | **약 11.8% 증가** |
 
-<details><summary><h3> [펼치기] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
+<details><summary><h3> [ 펼치기 ] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
 
 ### 캐시 적용 전
 <img width="2048" height="628" alt="image" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
@@ -223,7 +223,7 @@ be/url_backend/
 
 <br>
 
-### [Phase 3] @Async 비동기 처리로 사용자 대기 시간 최소화
+### [ Phase 3 ] @Async 비동기 처리로 사용자 대기 시간 최소화
 
 **Q. 통계 로그 저장이 늦어져 리디렉션 응답까지 지연되는 것이 타당한가?**
 
@@ -242,7 +242,7 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 7.77ms | **7.10ms** | **약 8.6% 단축** |
     | **Executed Tests (총 처리 건수)** | 133,013 | **148,226** | **약 11.4% 증가** |
 
-<details><summary><h3> [펼치기] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
+<details><summary><h3> [ 펼치기 ] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
 
 ### **비동기 적용 전**
 <img width="2048" height="610" alt="image" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
@@ -299,7 +299,7 @@ git clone https://github.com/UrlOps/perfurl-backend.git
 
 --- 
 
-<details><summary><h2> [펼치기] 프로젝트 주요 화면 </h2></summary>
+<details><summary><h2> [ 펼치기 ] 프로젝트 주요 화면 </h2></summary>
 <div markdown="1">
 
 <br>
@@ -325,5 +325,4 @@ git clone https://github.com/UrlOps/perfurl-backend.git
 <img width="2876" height="1404" alt="image" src="https://github.com/user-attachments/assets/1e330cad-6167-4cdc-b977-e1ef59d28e77" />
 </div>
 </details>
-
 
