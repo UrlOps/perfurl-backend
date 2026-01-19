@@ -24,6 +24,7 @@
 * **Analytics:** 접속 IP, 날짜, User-Agent 기반 상세 클릭 통계 제공
 * **Admin:** JWT 인증 기반 관리자 대시보드 (Chart.js 시각화)
 
+--------
 <br><br>
 
 ## 2. 기술 스택
@@ -37,6 +38,7 @@
 | **DevOps & Infra** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> | 개발/운영 환경의 불일치를 해결하고 반복적인 배포 과정을 자동화하여 개발 효율 증대 |
 | **Test & Monitor** | <img src="https://img.shields.io/badge/nGrinder-FFA500?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Scouter-00C7B7?style=for-the-badge&logo=scouter&logoColor=white"> | 실제 트래픽 환경을 모방하여 TPS, Latency 등 정량적 지표를 기반으로 병목 구간 파악 |
 
+--------
 <br><br>
 
 ## 3. 아키텍처 및 핵심 요청 처리 흐름
@@ -119,7 +121,7 @@ be/url_backend/
     ├── exception/    # 전역 예외 처리
     └── util/         # 공통 유틸리티
 ```
-
+--------
 <br><br>
 
 ## 4. 성능 고도화
@@ -259,6 +261,7 @@ be/url_backend/
 
 </div> </details>
 
+--------
 <br><br>
 
 ## 5. 설계 회고 및 한계 분석
@@ -281,7 +284,7 @@ be/url_backend/
 
 <img width="80%" height="500" alt="image" src="https://github.com/user-attachments/assets/f184a014-49ea-48eb-9737-3a3a75e1cc58" />
 
-
+--------
 <br><br>
 
 ## 6. 설치 및 실행
