@@ -182,23 +182,23 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 386.81ms | **5.43ms** | **약 98% 단축** |
     | **Executed Tests (총 처리 건수)** | 2,949 | **192,522** | **약 65배 증가** |
 
-> <details>
-> <summary><strong>[성능 지표] 복합 인덱스 적용 전/후 nGrinder 테스트 결과 비교</strong></summary>
-> <div markdown="1">
-> <br>
->
-> #### 1. 인덱스 적용 전
->
-> <img width="100%" alt="인덱스 적용 전 그래프" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
->
-> <br>
->
-> #### 2. 인덱스 적용 후
->
-> <img width="100%" alt="인덱스 적용 후 그래프" src="https://github.com/user-attachments/assets/0e04d1de-a9f0-46c9-802b-308f08b96fb7" />
->
-> </div>
-> </details>
+    > <details>
+    > <summary><strong>[성능 지표] 복합 인덱스 적용 전/후 nGrinder 테스트 결과 비교</strong></summary>
+    > <div markdown="1">
+    > <br>
+    >
+    > #### 1. 인덱스 적용 전
+    >
+    > <img width="100%" alt="인덱스 적용 전 그래프" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
+    >
+    > <br>
+    >
+    > #### 2. 인덱스 적용 후
+    >
+    > <img width="100%" alt="인덱스 적용 후 그래프" src="https://github.com/user-attachments/assets/0e04d1de-a9f0-46c9-802b-308f08b96fb7" />
+    >
+    > </div>
+    > </details>
 
 <br><br>
 
@@ -223,20 +223,20 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 39.84ms | **37.04ms** | **약 7.0% 단축** |
     | **Executed Tests (총 처리 건수)** | 137,858 | **154,194** | **약 11.8% 증가** |
 
-> <details>
-> <summary><strong> [성능 지표] Ehcache(Local Cache) 도입 전/후 리디렉션 응답 속도 비교 </strong></summary>
-> <div markdown="1">
-> <br>
-> **[ 캐시 미적용 ]**
->
-> <img width="100%" alt="캐시 미적용 그래프" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
->
-> **[ 캐시 적용 ]**
-> 
-> <img width="100%" alt="캐시 적용 그래프" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
->
-> </div>
-> </details>
+    > <details>
+    > <summary><strong> [성능 지표] Ehcache(Local Cache) 도입 전/후 리디렉션 응답 속도 비교 </strong></summary>
+    > <div markdown="1">
+    > <br>
+    > **[ 캐시 미적용 ]**
+    >
+    > <img width="100%" alt="캐시 미적용 그래프" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
+    >
+    > **[ 캐시 적용 ]**
+    > 
+    > <img width="100%" alt="캐시 적용 그래프" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
+    >
+    > </div>
+    > </details>
 
 <br>
 
@@ -259,25 +259,26 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 7.77ms | **7.10ms** | **약 8.6% 단축** |
     | **Executed Tests (총 처리 건수)** | 133,013 | **148,226** | **약 11.4% 증가** |
 
-> <details>
-> <summary><strong>[성능 지표] @Async 비동기 처리 적용 전/후 Peak TPS 및 응답 시간 변화 확인</strong></summary>
-> <div markdown="1">
-> <br>
->
-> **[ 비동기 적용 전: 처리량 및 전체 소요 시간 ]**
->
-> <img width="100%" alt="비동기 적용 전 TPS" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
-> <img width="100%" alt="비동기 적용 전 테스트 시간" src="https://github.com/user-attachments/assets/1760975d-0807-4752-af33-af8e88777726" />
->
-> <br>
->
-> **[ 비동기 적용 후: 처리량 및 전체 소요 시간 ]**
->
-> <img width="100%" alt="비동기 적용 후 TPS" src="https://github.com/user-attachments/assets/966d54c2-2dda-4312-94eb-24d3d381396a" />
-> <img width="100%" alt="비동기 적용 후 테스트 시간" src="https://github.com/user-attachments/assets/19bab646-549e-474b-8042-71c698daa56f" />
->
-> </div>
-> </details>
+    > <details>
+    > <summary><strong>[성능 지표] @Async 비동기 처리 적용 전/후 Peak TPS 및 응답 시간 변화 확인</strong></summary>
+    > <div markdown="1">
+    > <br>
+    >
+    > **[ 비동기 적용 전: 처리량 및 전체 소요 시간 ]**
+    >
+    > <img width="100%" alt="비동기 적용 전 TPS" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
+    > <img width="100%" alt="비동기 적용 전 테스트 시간" src="https://github.com/user-attachments/assets/1760975d-0807-4752-af33-af8e88777726" />
+    >
+    > <br><br>
+    >
+    >
+    > **[ 비동기 적용 후: 처리량 및 전체 소요 시간 ]**
+    >
+    > <img width="100%" alt="비동기 적용 후 TPS" src="https://github.com/user-attachments/assets/966d54c2-2dda-4312-94eb-24d3d381396a" />
+    > <img width="100%" alt="비동기 적용 후 테스트 시간" src="https://github.com/user-attachments/assets/19bab646-549e-474b-8042-71c698daa56f" />
+    >
+    > </div>
+    > </details>
 
 --------
 <br><br>
