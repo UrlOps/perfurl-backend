@@ -30,13 +30,14 @@
 ## 2. 기술 스택
 
 | Category | Technology | Reason for Selection |
-| :--- | :--- | :--- |
-| **Language** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> | LTS 버전의 안정성을 확보하고 Record 패턴 등을 활용해 코드 간결성 향상 |
-| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.x-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> | 풍부한 레퍼런스를 통한 개발 생산성 확보 및 관리자 대시보드 UI의 효율적 구현 |
-| **Database & ORM** | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <br> <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> | 객체 지향적인 데이터 접근과 QueryDSL을 통한 컴파일 시점의 쿼리 오류 방지 |
-| **Caching** | <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> | 별도 인프라 구축 없이 네트워크 비용이 없는 Local Cache로 조회 성능 최적화 |
-| **DevOps & Infra** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> | 개발/운영 환경의 불일치를 해결하고 반복적인 배포 과정을 자동화하여 개발 효율 증대 |
-| **Test & Monitor** | <img src="https://img.shields.io/badge/nGrinder-FFA500?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Scouter-00C7B7?style=for-the-badge&logo=scouter&logoColor=white"> | 실제 트래픽 환경을 모방하여 TPS, Latency 등 정량적 지표를 기반으로 병목 구간 파악 |
+| --- | --- | --- |
+| **Language** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> | LTS 버전의 안정적인 생태계를 활용하고 Record 패턴 등을 통한 코드 간결성 확보 |
+| **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.5.4-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white"> <img src="https://img.shields.io/badge/Vue.js_3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> | 내장 서버를 통한 신속한 환경 구성 및 의존성 관리 최적화로 성능 튜닝에 집중할 수 있는 환경 확보 |
+| **Database** | <img src="https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> | 대량의 로그 데이터 적재를 위한 인덱싱 최적화(MySQL) 및 로컬 캐싱을 통한 I/O 병목 제거(Ehcache) |
+| **ORM** | <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> | 객체 지향적 설계와 생산성 확보 및 통계 쿼리 최적화를 위한 타입 안정성 보장 동적 쿼리 구현 |
+| **API Specs** | <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white"> | API 엔드포인트별 유닛 테스트 수행 및 시나리오별 API 동작 검증과 명세 관리 효율화 |
+| **Infra & DevOps** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> | 개발/운영 환경의 일관성을 유지하고 CI/CD 파이프라인 구축을 통한 배포 자동화 구현 |
+| **Test & Monitor** | <img src="https://img.shields.io/badge/nGrinder-FFA500?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Scouter-00C7B7?style=for-the-badge&logo=scouter&logoColor=white"> | 정량적 지표(TPS, Latency)를 기반으로 병목 구간을 탐지하고 최적화 성과를 검증 |
 
 --------
 <br><br>
@@ -126,11 +127,18 @@ be/url_backend/
 
 ## 4. 성능 고도화
 
-**"가설 → 검증"** 프로세스에 따라 문제를 정의하고 부하 테스트로 검증했습니다.
+> **"가설 → 검증 → 분석"** 프로세스에 따라 성능 병목 지점을 정의하고 정량적 지표를 바탕으로 최적화 효과를 검증했습니다.
 
-* **Test Environment:** (Mac)Local, Docker Container, nGrinder
-* **Target:** 임시 데이터 50만 건, 가상 사용자 접속 상황
-
+### 4-1. 테스트 환경 및 전략
+* **Environment:** (Local) macOS / Windows 기반 단일 인스턴스 환경
+* **Strategy:** 외부 프로세스 간섭을 최소화하기 위해 **애플리케이션과 DB만 구동된 정적 상태**에서 반복 측정 수행
+* **Tools:** **nGrinder** (부하 발생 및 지표 측정), **Scouter** (실시간 리소스 모니터링)
+* **Target Data:** 실무 수준의 조회를 가정하여 `click_log` 테이블 내 **임시 데이터 50만 건** 적재
+* **Focus Metrics:**
+  * **TPS:** 시스템의 초당 최대 처리량 확보
+  * **Mean Test Time:** 사용자 체감 응답 시간 단축
+  * **Peak TPS:** 임계점 상황에서의 시스템 안정성 확인
+ 
 <br><br>
 
 ### [ Phase 1 ] 복합 인덱스로 조회 성능 65배 개선
@@ -174,17 +182,23 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 386.81ms | **5.43ms** | **약 98% 단축** |
     | **Executed Tests (총 처리 건수)** | 2,949 | **192,522** | **약 65배 증가** |
 
-<details><summary><h3> [ 펼치기 ] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
-
-### **인덱스 적용 전**
-<img width="2048" height="620" alt="image" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
-
-<br>
-
-### **인덱스 적용 후**
-<img width="2048" height="609" alt="image" src="https://github.com/user-attachments/assets/0e04d1de-a9f0-46c9-802b-308f08b96fb7" />
-
-</div> </details>
+> <details>
+> <summary><strong>[성능 지표] 복합 인덱스 적용 전/후 nGrinder 테스트 결과 비교</strong></summary>
+> <div markdown="1">
+> <br>
+>
+> #### 1. 인덱스 적용 전
+>
+> <img width="100%" alt="인덱스 적용 전 그래프" src="https://github.com/user-attachments/assets/8f46525c-e5d8-444e-8752-6e1660406bd9" />
+>
+> <br>
+>
+> #### 2. 인덱스 적용 후
+>
+> <img width="100%" alt="인덱스 적용 후 그래프" src="https://github.com/user-attachments/assets/0e04d1de-a9f0-46c9-802b-308f08b96fb7" />
+>
+> </div>
+> </details>
 
 <br><br>
 
@@ -209,17 +223,20 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 39.84ms | **37.04ms** | **약 7.0% 단축** |
     | **Executed Tests (총 처리 건수)** | 137,858 | **154,194** | **약 11.8% 증가** |
 
-<details><summary><h3> [ 펼치기 ] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
-
-### 캐시 적용 전
-<img width="2048" height="628" alt="image" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
-
-<br>
-
-### 캐시 적용 후
-<img width="2048" height="614" alt="image" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
-
-</div> </details>
+> <details>
+> <summary><strong> [성능 지표] Ehcache(Local Cache) 도입 전/후 리디렉션 응답 속도 비교 </strong></summary>
+> <div markdown="1">
+> <br>
+> **[ 캐시 미적용 ]**
+>
+> <img width="100%" alt="캐시 미적용 그래프" src="https://github.com/user-attachments/assets/103d28bd-034c-497e-9715-cc3b53cf78ad" />
+>
+> **[ 캐시 적용 ]**
+> 
+> <img width="100%" alt="캐시 적용 그래프" src="https://github.com/user-attachments/assets/b8abf39d-b31d-4508-95c4-c90b95b4c830" />
+>
+> </div>
+> </details>
 
 <br>
 
@@ -242,24 +259,25 @@ be/url_backend/
     | **Mean Test Time (평균 응답 시간)** | 7.77ms | **7.10ms** | **약 8.6% 단축** |
     | **Executed Tests (총 처리 건수)** | 133,013 | **148,226** | **약 11.4% 증가** |
 
-<details><summary><h3> [ 펼치기 ] nGrinder 테스트 결과 그래프 확인</h3></summary> <div markdown="1">
-
-### **비동기 적용 전**
-<img width="2048" height="610" alt="image" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
-
-<br>
-
-### **한 작업을 끝내는 데 필요한 전체 시간**
-<img width="2048" height="1035" alt="image" src="https://github.com/user-attachments/assets/1760975d-0807-4752-af33-af8e88777726" />
-
-<br>
-
-### **비동기 적용 후**
-<img width="2048" height="631" alt="image" src="https://github.com/user-attachments/assets/966d54c2-2dda-4312-94eb-24d3d381396a" />
-
-<img width="2048" height="1035" alt="image" src="https://github.com/user-attachments/assets/19bab646-549e-474b-8042-71c698daa56f" />
-
-</div> </details>
+> <details>
+> <summary><strong>[성능 지표] @Async 비동기 처리 적용 전/후 Peak TPS 및 응답 시간 변화 확인</strong></summary>
+> <div markdown="1">
+> <br>
+>
+> **[ 비동기 적용 전: 처리량 및 전체 소요 시간 ]**
+>
+> <img width="100%" alt="비동기 적용 전 TPS" src="https://github.com/user-attachments/assets/5846f48d-c987-4dde-b02e-69810bab0dfd" />
+> <img width="100%" alt="비동기 적용 전 테스트 시간" src="https://github.com/user-attachments/assets/1760975d-0807-4752-af33-af8e88777726" />
+>
+> <br>
+>
+> **[ 비동기 적용 후: 처리량 및 전체 소요 시간 ]**
+>
+> <img width="100%" alt="비동기 적용 후 TPS" src="https://github.com/user-attachments/assets/966d54c2-2dda-4312-94eb-24d3d381396a" />
+> <img width="100%" alt="비동기 적용 후 테스트 시간" src="https://github.com/user-attachments/assets/19bab646-549e-474b-8042-71c698daa56f" />
+>
+> </div>
+> </details>
 
 --------
 <br><br>
@@ -300,7 +318,7 @@ git clone https://github.com/UrlOps/perfurl-backend.git
 
 --- 
 
-<details><summary><h2> [ 펼치기 ] 프로젝트 주요 화면 </h2></summary>
+<details><summary><h2> 7. 프로젝트 주요 화면 </h2></summary>
 <div markdown="1">
 
 <br>
