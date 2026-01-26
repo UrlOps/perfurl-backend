@@ -305,9 +305,7 @@ be/url_backend/
 * Trade-off 및 해결:
     * 영속성 컨텍스트 생명주기가 줄어듦에 따라 발생하는 `LazyInitializationException` 문제는 Service 계층에서 명시적인 **DTO 변환**을 수행하여 해결했습니다.
 
-<img width="80%" height="500" alt="image" src="https://github.com/user-attachments/assets/f184a014-49ea-48eb-9737-3a3a75e1cc58" />
-
-<img width="100%" height="1536" alt="image" src="https://github.com/user-attachments/assets/e31e6260-2dc4-4f51-8527-637615a1436c" />
+<img width="100%" height="500" alt="image" src="https://github.com/user-attachments/assets/f184a014-49ea-48eb-9737-3a3a75e1cc58" />
 
 
 --------
