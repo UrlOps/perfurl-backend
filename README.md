@@ -67,9 +67,7 @@
 >
 > **[ AS-IS ] Sync + No Cache: 트랜잭션 강결합 및 시스템 마비**
 >
-> <br>
 > <img width="1276" height="862" alt="image" src="https://github.com/user-attachments/assets/2d197f32-2453-4570-ad5b-98273e4fba7f" />
->
 > <br>
 > <img width="730" height="88" alt="image" src="https://github.com/user-attachments/assets/5fd6a49e-b3c1-44f7-8735-afda19b005fb" />
 >
@@ -77,9 +75,7 @@
 >
 > **[ TO-BE ] Async + Ehcache: DB I/O 격리 및 가용성 확보**
 >
-> <br>
 > <img width="1252" height="954" alt="image" src="https://github.com/user-attachments/assets/894faa45-74b9-4afc-b68f-9ef68f676dea" />
->
 > <br>
 > <img width="724" height="92" alt="image" src="https://github.com/user-attachments/assets/3393c777-998f-4f62-b027-dc01faca2bb4" />
 >
