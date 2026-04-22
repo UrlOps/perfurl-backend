@@ -14,7 +14,7 @@
 
 **[ PerfUrl ]** 은 긴 URL을 단축 URL로 변환하고 접속 통계를 수집하는 웹 서비스입니다 
 
-단순 기능 구현을 넘어 백엔드 핵심 개념인 인덱스 설계, 로컬 캐시 전략, 스레드 분리가 고부하 상황에서 실제 애플리케이션 가용성과 응답 속도에 미치는 영향을 k6와 Docker Stats로 정량 측정하고 분석하는 데 집중했습니다
+단순 기능 구현을 넘어 백엔드 핵심 개념인 인덱스 설계, 로컬 캐시 전략, 스레드 분리가 고부하 상황에서 실제 애플리케이션 가용성과 응답 속도에 미치는 영향을 k6와 docker Stats로 정량 측정하고 분석하는 데 집중했습니다
 
 ### 주요 기능
 
@@ -32,7 +32,7 @@
 | **Framework** | <img src="https://img.shields.io/badge/Spring_Boot_3.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white"> | 내장 서버를 통한 신속한 환경 구성 및 의존성 관리 최적화 |
 | **Database** | <img src="https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Ehcache-005571?style=for-the-badge&logo=java&logoColor=white"> | 대량 로그 데이터 적재를 위한 인덱싱 최적화 및 로컬 캐싱을 통한 I/O 병목 제거 |
 | **ORM** | <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-007ACC?style=for-the-badge&logo=java&logoColor=white"> | 객체 지향적 설계 생산성 확보 및 통계 쿼리 최적화를 위한 타입 안정성 보장 |
-| **Infra / Test** | <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/k6-7D64FF?style=for-the-badge&logo=k6&logoColor=white"> | Docker 리소스 제한을 통한 물리적 인프라 모사 및 k6 부하 인가 테스트 수행 |
+| **Infra / Test** | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"> <img src="https://img.shields.io/badge/k6-7D64FF?style=for-the-badge&logo=k6&logoColor=white"> | 개발/운영 환경의 일관성을 유지하고 CI/CD 파이프라인 구축을 통한 배포 자동화 구현, Docker 리소스 제한을 통한 물리적 인프라 모사 및 k6 부하 인가 테스트 수행 |
 
 <br><br>
 
@@ -62,23 +62,23 @@
     | **DB CPU 사용량** | 85.18% | **38.45%** | **부하 55% 감소** |
 
 > <details>
-> <summary><strong>[ 증빙 자료 ] k6 리디렉션 부하 테스트 지표 및 Docker Stats 비교</strong></summary>
+> <summary><strong>[ 증빙 자료 ] k6 리디렉션 부하 테스트 지표 및 docker Stats 비교</strong></summary>
 > <div markdown="1">
 > <br>
 >
 > **[ AS-IS ] Sync + No Cache: 트랜잭션 강결합 및 시스템 마비**
 >
-> <img width="1276" height="862" alt="image" src="https://github.com/user-attachments/assets/2d197f32-2453-4570-ad5b-98273e4fba7f" />
+> <img width="1276" height="862" alt="image" src="https://github.com/user-attachments/assets/768dbe04-a62f-4359-9933-16550b57593a" />
 > <br>
-> <img width="730" height="88" alt="image" src="https://github.com/user-attachments/assets/5fd6a49e-b3c1-44f7-8735-afda19b005fb" />
+> <img width="730" height="88" alt="image" src="https://github.com/user-attachments/assets/735bc6e0-8408-4aab-a0fd-0873e933cee5" />
 >
 > <br>
 >
 > **[ TO-BE ] Async + Ehcache: DB I/O 격리 및 가용성 확보**
 >
-> <img width="1252" height="954" alt="image" src="https://github.com/user-attachments/assets/894faa45-74b9-4afc-b68f-9ef68f676dea" />
+> <img width="1252" height="954" alt="image" src="https://github.com/user-attachments/assets/5b9253a6-612f-46be-a8dc-dc90f09025d5" />
 > <br>
-> <img width="724" height="92" alt="image" src="https://github.com/user-attachments/assets/3393c777-998f-4f62-b027-dc01faca2bb4" />
+> <img width="724" height="92" alt="image" src="https://github.com/user-attachments/assets/01034f4c-d032-4330-b451-d73847b1437d" />
 >
 > </div>
 > </details>
