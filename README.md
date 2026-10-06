@@ -5,7 +5,7 @@
 > * 상시 500 TPS 대규모 마케팅 유입 부하 ➔ 로컬 캐싱과 비동기 파이프라인 구축으로 P50 응답 속도 3.47초에서 106ms로 단축 및 부하 누락 95.9% 방어
 
 > **핵심 성과 요약**
-> * 단축 URL 리디렉션 및 RDBMS I/O 병목 ➔ JVM 힙 기반 Ehcache 로컬 캐싱 및 비동기 파이프라인 구축으로 P50 응답 속도 3.47초에서 106ms로 96.9% 단축 및 P95 지연 6.23초에서 1.72초로 통제
+> * 단축 URL 리디렉션 및 RDBMS I/O 병목 ➔ JVM 힙 기반 Ehcache 로컬 캐싱 및 비동기 파이프라인 구축으로 P50 응답 속도 3.47초에서 106ms로 96.9% 단축 및 P95 지연 6.23초에서 1.72초로 72.3% 통제
 > * 로그 적재 쓰기 작업 강결합 리스크 ➔ 비동기 워커 스레드 풀 분리 및 DiscardPolicy 격리로 평균 처리량 177.9에서 293.5 TPS 확보 및 부하 누락 43,519건에서 1,764건으로 95.9% 방어
 > * 50만 건 이상 다중 조건 필터링 부하 ➔ 카디널리티 기반 복합 인덱스 설계로 쿼리 실행 속도 218ms에서 3ms로 98% 단축
 > * 시계열 로그 누적에 따른 인덱스 비대화 ➔ 만료 로그 대상 벌크 Hard Delete 정기 Purge 배치 구축으로 디스크 I/O 최적화 및 버퍼 풀 효율 확보
@@ -47,7 +47,7 @@ src/main/java/be/url_backend
 
 ## 2. 시스템 전체 아키텍처
 
-<img width="1007" height="1562" alt="image" src="https://github.com/user-attachments/assets/b8c079c4-431f-4a68-998a-c9ccd62f2f43" />
+<img width="422" height="430" alt="image" src="https://github.com/user-attachments/assets/94d13b20-6011-4fc7-bc04-3a1211c6c4ea" />
 
 <br><br>
 
@@ -72,7 +72,7 @@ src/main/java/be/url_backend
 
 ### [ Deep-Dive 1 ] 대규모 리디렉션 트래픽 및 RDBMS I/O 병목 방어
 
-<img width="1112" height="1062" alt="image" src="https://github.com/user-attachments/assets/ccfab0eb-5eb3-4847-b2db-6d34de0bfa59" />
+<img width="1113" height="1063" alt="image" src="https://github.com/user-attachments/assets/3da38546-4708-49d3-bfbd-d816c2ebeb18" />
 
 * **문제 원인**
     * 단축 URL 리디렉션 피크 트래픽 집중과 RDBMS I/O 병목 ➔ 단일 쿼리 매핑 지연 및 P95 지연 6.23초 병목 현상 식별
@@ -83,7 +83,7 @@ src/main/java/be/url_backend
     * 로그 적재 정체 메인 스레드 전이 리스크 ➔ 클릭 로그 쓰기 작업 비동기 워커 스레드 분리 및 이벤트 위임 아키텍처로 스레드 블로킹 방어
     * 워커 큐 포화에 따른 연쇄 마비 리스크 ➔ 큐 포화 시 CallerRuns 강제 실행 배제 및 DiscardPolicy 기반 의도적 로그 유실(Drop) 채택으로 메인 리디렉션 서비스 가용성 확보
 * **정량적 실측 성과**
-    * 메인 스레드 I/O 블로킹 차단으로 P50 응답 속도 3.47초에서 106ms로 96.9% 단축 및 P95 지연 6.23초에서 1.72초로 통제
+    * 메인 스레드 I/O 블로킹 차단으로 P50 응답 속도 3.47초에서 106ms로 96.9% 단축 및 P95 지연 6.23초에서 1.72초로 72.3% 통제
     * 비동기 워커 격리 기반 트랜잭션 동기 처리 병목 해소로 평균 처리량 177.9에서 293.5 TPS 확보 및 부하 누락 43,519건에서 1,764건으로 95.9% 방어
     * 메모리 사용량 톱니바퀴 패턴 제어로 단일 인스턴스 기준 동일 시간 내 106,234건 트랜잭션 정상 수용 및 인프라 가동률 확보
 
@@ -130,7 +130,7 @@ src/main/java/be/url_backend
 
 ## 6. ERD 데이터베이스 모델링
 
-<img width="422" height="430" alt="image" src="https://github.com/user-attachments/assets/94d13b20-6011-4fc7-bc04-3a1211c6c4ea" />
+<img width="1007" height="1562" alt="image" src="https://github.com/user-attachments/assets/b8c079c4-431f-4a68-998a-c9ccd62f2f43" />
 
 <br><br>
 
