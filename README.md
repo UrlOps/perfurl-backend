@@ -47,7 +47,7 @@ src/main/java/be/url_backend
 
 ## 2. 시스템 전체 아키텍처
 
-<img width="422" height="430" alt="image" src="https://github.com/user-attachments/assets/94d13b20-6011-4fc7-bc04-3a1211c6c4ea" />
+<img width="1007" height="1562" alt="image" src="https://github.com/user-attachments/assets/bb1e1a40-25d9-411b-b7ca-4202938110a0" />
 
 <br><br>
 
@@ -130,7 +130,7 @@ src/main/java/be/url_backend
 
 ## 6. ERD 데이터베이스 모델링
 
-<img width="1007" height="1562" alt="image" src="https://github.com/user-attachments/assets/b8c079c4-431f-4a68-998a-c9ccd62f2f43" />
+<img width="422" height="430" alt="image" src="https://github.com/user-attachments/assets/f67f2fb5-78db-45ef-b5ba-825ca22ccc98" />
 
 <br><br>
 
