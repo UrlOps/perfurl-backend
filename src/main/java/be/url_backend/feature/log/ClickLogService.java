@@ -11,8 +11,8 @@ public class ClickLogService {
 
     private final ClickLogWriter clickLogWriter;
 
-    @Async
-    public void logClickAndupdateDailyStats(UrlMapping urlMapping, String userAgent, String ipAddress) {
-        clickLogWriter.saveLogAndStats(urlMapping, userAgent, ipAddress);
+    @Async("asyncExecutor")
+    public void logClickAndupdateDailyStats(UrlMapping urlMapping, String userAgent, String ipAddress, String referer) {
+        clickLogWriter.saveLogAndStats(urlMapping, userAgent, ipAddress, referer);
     }
-} 
+    }
