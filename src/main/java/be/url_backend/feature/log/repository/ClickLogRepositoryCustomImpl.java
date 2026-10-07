@@ -1,5 +1,6 @@
 package be.url_backend.feature.log.repository;
 
+import be.url_backend.feature.log.ClickLog;
 import be.url_backend.feature.log.ClickLogResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -26,6 +27,11 @@ public class ClickLogRepositoryCustomImpl implements ClickLogRepositoryCustom {
 
     @Override
     public Page<ClickLogResponseDto> searchClickLogs(Pageable pageable, String ipAddress, LocalDate startDate, LocalDate endDate) {
+        return searchClickLogs(pageable, null, ipAddress, startDate, endDate);
+    }
+
+    @Override
+    public Page<ClickLogResponseDto> searchClickLogs(Pageable pageable, String shortKey, String ipAddress, LocalDate startDate, LocalDate endDate) {
         List<ClickLogResponseDto> content = queryFactory
                 .select(Projections.constructor(ClickLogResponseDto.class,
                         clickLog.id,
@@ -38,6 +44,7 @@ public class ClickLogRepositoryCustomImpl implements ClickLogRepositoryCustom {
                 .from(clickLog)
                 .join(clickLog.urlMapping, urlMapping)
                 .where(
+                        shortKeyEq(shortKey),
                         ipAddressEq(ipAddress),
                         createdAtGoe(startDate),
                         createdAtLoe(endDate)
@@ -50,13 +57,33 @@ public class ClickLogRepositoryCustomImpl implements ClickLogRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(clickLog.count())
                 .from(clickLog)
+                .join(clickLog.urlMapping, urlMapping)
                 .where(
+                        shortKeyEq(shortKey),
                         ipAddressEq(ipAddress),
                         createdAtGoe(startDate),
                         createdAtLoe(endDate)
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<ClickLog> findClickLogsForAnalytics(String shortKey, LocalDate startDate, LocalDate endDate) {
+        return queryFactory
+                .selectFrom(clickLog)
+                .join(clickLog.urlMapping, urlMapping).fetchJoin()
+                .where(
+                        shortKeyEq(shortKey),
+                        createdAtGoe(startDate),
+                        createdAtLoe(endDate)
+                )
+                .orderBy(clickLog.createdAt.asc())
+                .fetch();
+    }
+
+    private BooleanExpression shortKeyEq(String shortKey) {
+        return (shortKey != null && !shortKey.isBlank()) ? urlMapping.shortKey.eq(shortKey) : null;
     }
 
     private BooleanExpression ipAddressEq(String ipAddress) {

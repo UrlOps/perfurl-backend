@@ -15,7 +15,8 @@ public enum ResponseText {
     URL_INFO_FETCH_SUCCESS("URL 정보 조회 성공"),
     URL_DELETE_SUCCESS("URL 삭제 성공"),
     URL_STATS_FETCH_SUCCESS("URL 통계 조회 성공"),
-    URL_DAILY_STATS_FETCH_SUCCESS("일별 통계 조회 성공");
+    URL_DAILY_STATS_FETCH_SUCCESS("일별 통계 조회 성공"),
+    URL_ANALYTICS_FETCH_SUCCESS("단축 URL 분석 통계 조회 성공");
 
     private final String msg;
 

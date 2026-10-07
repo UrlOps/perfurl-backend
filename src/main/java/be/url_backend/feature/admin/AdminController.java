@@ -5,6 +5,7 @@ import be.url_backend.feature.admin.dto.AdminResponseDto;
 import be.url_backend.feature.admin.dto.AdminSignupRequestDto;
 import be.url_backend.feature.log.ClickLogResponseDto;
 import be.url_backend.feature.stats.DailyStatsDto;
+import be.url_backend.feature.stats.dto.UrlAnalyticsResponseDto;
 import be.url_backend.common.dto.JwtResponseDto;
 import be.url_backend.common.dto.ApiResponse;
 import be.url_backend.common.dto.ResponseText;
@@ -115,6 +116,7 @@ public class AdminController {
      * 전체 클릭 로그 조회 API (페이징)
      *
      * @param pageable  페이징 정보
+     * @param shortKey  단축 URL 키 (선택적 필터)
      * @param ipAddress IP 주소 (선택적 필터)
      * @param startDate 시작일 (선택적 필터)
      * @param endDate   종료일 (선택적 필터)
@@ -124,10 +126,11 @@ public class AdminController {
     public ResponseEntity<Page<ClickLogResponseDto>> getAllClickLogs(
             Pageable pageable,
             @AuthenticationPrincipal Admin admin,
+            @RequestParam(required = false) String shortKey,
             @RequestParam(required = false) String ipAddress,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        Page<ClickLogResponseDto> clickLogs = adminService.getAllClickLogs(pageable, ipAddress, startDate, endDate);
+        Page<ClickLogResponseDto> clickLogs = adminService.getAllClickLogs(pageable, shortKey, ipAddress, startDate, endDate);
         return ResponseEntity.ok(clickLogs);
     }
 
@@ -135,6 +138,7 @@ public class AdminController {
      * 일별 통계 조회 API (페이징)
      *
      * @param pageable  페이징 정보
+     * @param shortKey  단축 URL 키 (선택적 필터)
      * @param startDate 시작일 (선택적 필터)
      * @param endDate   종료일 (선택적 필터)
      * @return 일별 통계 데이터 페이지
@@ -143,10 +147,35 @@ public class AdminController {
     public ResponseEntity<Page<DailyStatsDto>> getDailyStats(
             Pageable pageable,
             @AuthenticationPrincipal Admin admin,
+            @RequestParam(required = false) String shortKey,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        Page<DailyStatsDto> stats = adminService.getDailyStats(pageable, startDate, endDate);
+        Page<DailyStatsDto> stats = adminService.getDailyStats(pageable, shortKey, startDate, endDate);
         return ResponseEntity.ok(stats);
+    }
+
+    /**
+     * 단축 URL별 트래픽 트렌드 및 클라이언트 데이터 분석 통계 API
+     *
+     * @param shortKey  단축 URL 키
+     * @param admin     인증된 관리자 정보
+     * @param startDate 시작일 (선택적 필터)
+     * @param endDate   종료일 (선택적 필터)
+     * @return 클라이언트 데이터(IP, User-Agent, Referer) 분석 및 일자별 트래픽 트렌드 인사이트 DTO
+     */
+    @GetMapping("/urls/{shortKey}/analytics")
+    public ResponseEntity<ApiResponse<UrlAnalyticsResponseDto>> getUrlAnalytics(
+            @PathVariable String shortKey,
+            @AuthenticationPrincipal Admin admin,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        UrlAnalyticsResponseDto analytics = adminService.getUrlAnalytics(shortKey, startDate, endDate);
+        ApiResponse<UrlAnalyticsResponseDto> response = ApiResponse.<UrlAnalyticsResponseDto>builder()
+                .msg(ResponseText.URL_ANALYTICS_FETCH_SUCCESS.getMsg())
+                .statuscode(String.valueOf(HttpStatus.OK.value()))
+                .data(analytics)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     private String getBaseUrl(HttpServletRequest request) {
