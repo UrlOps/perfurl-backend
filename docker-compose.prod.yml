@@ -1,0 +1,44 @@
+services:
+  app:
+    build: .
+    container_name: perfurl-backend
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'      # WAS 1.0 vCPU 제한
+          memory: 2G       # 2GB RAM 제한
+    ports:
+      - "8081:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_URL=jdbc:mysql://db:3306/perfurl?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - JWT_SECRET_KEY=yoursecretkeyyoursecretkeyyoursecretkeyyoursecretkey
+      - JWT_EXPIRATION_TIME=86400000
+      - JAVA_OPTS=-Xms1024m -Xmx1024m -XX:+UseZGC -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints -javaagent:/app/scouter/agent.java/scouter.agent.jar -Dscouter.config=/app/scouter/agent.java/conf/scouter.conf -Dobj_name=perfurl-as-is-01 -Dscouter.host.name=perfurl-host --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.management/java.lang.management=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED --add-opens jdk.management/com.sun.management=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+  db:
+    image: mysql:8.0
+    container_name: perfurl-db
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'      # DB 1.0 vCPU 제한
+          memory: 2G
+    ports:
+      - "3308:3306"      # 로컬 MySQL(3306) 및 kicksync(3307)와 충돌 방지
+    environment:
+      - MYSQL_DATABASE=perfurl
+      - MYSQL_ROOT_PASSWORD=root
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    restart: always

@@ -29,3 +29,6 @@ jwt:
 #test:
 #  data:
 #    enabled: true # 테스트 데이터 생성 기능 활성화
+spring.jpa.properties.hibernate.jdbc.batch_size: 500
+spring.jpa.properties.hibernate.order_inserts: true
+spring.jpa.properties.hibernate.order_updates: true
