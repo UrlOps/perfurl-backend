@@ -34,7 +34,7 @@ public class UrlResponseDto {
                 .originalUrl(urlMapping.getOriginalUrl())
                 .shortenUrl(baseUrl + "/" + urlMapping.getShortKey())
                 .createdAt(urlMapping.getCreatedAt())
-                .expireAt(urlMapping.getExpireAt())
+                .expireAt(urlMapping.getExpiresAt())
                 .build();
     }
 

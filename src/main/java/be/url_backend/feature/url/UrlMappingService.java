@@ -9,6 +9,7 @@ import be.url_backend.feature.url.dto.UrlResponseDto;
 import be.url_backend.feature.url.repository.UrlMappingRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UrlMappingService {
     private final UrlMappingRepository urlMappingRepository;
-    private final ClickLogService clickLogService;
 
-    /**
-     * 단축 URL 생성
-     *
-     * @param requestDto 단축할 원본 URL 요청 데이터
-     * @param baseUrl    단축 URL에 사용될 기본 URL
-     * @return 생성된 단축 URL 정보
-     */
     @Transactional
     public UrlResponseDto createShortUrl(UrlCreateRequestDto requestDto, String baseUrl) {
         String originalUrl = requestDto.getOriginalUrl();
@@ -40,25 +33,21 @@ public class UrlMappingService {
             throw new CustomException(ErrorCode.URL_IS_ALREADY_SHORT);
         }
 
-        String shortKey;
-        do {
-            shortKey = Base62Utils.generateShortKey();
-        } while (urlMappingRepository.findByShortKey(shortKey).isPresent());
-
         UrlMapping urlMapping = UrlMapping.createUrlMapping(requestDto.getOriginalUrl());
-        urlMapping.updateShortKey(shortKey);
-        UrlMapping savedUrlMapping = urlMappingRepository.save(urlMapping);
+        // 고유 DB ID(Auto-Increment) 획득을 위해 임시 키 설정 후 엔티티 저장 및 플러시
+        urlMapping.updateShortKey("TEMP_" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 8));
+        UrlMapping savedUrlMapping = urlMappingRepository.saveAndFlush(urlMapping);
+
+        // 발급된 고유 ID를 기반으로 Base62 진법 인코딩 수행 (O(1) 충돌 없는 고유 단축 키 보장)
+        String shortKey = Base62Utils.encodeWithPadding(savedUrlMapping.getId(), Base62Utils.SHORT_KEY_LENGTH);
+        savedUrlMapping.updateShortKey(shortKey);
 
         return UrlResponseDto.from(savedUrlMapping, baseUrl);
     }
 
-    @Transactional
-    public String getOriginalUrlAndLogClick(String shortKey, HttpServletRequest request) {
-        UrlMapping urlMapping = urlMappingRepository.findByShortKey(shortKey)
+    @Cacheable(value = "url-mapping-cache", key = "#shortKey")
+    public UrlMapping getUrlMapping(String shortKey) {
+        return urlMappingRepository.findByShortKey(shortKey)
                 .orElseThrow(() -> new CustomException(ErrorCode.URL_NOT_FOUND));
-
-        clickLogService.logClickAndupdateDailyStats(urlMapping, request.getHeader("User-Agent"), request.getRemoteAddr());
-
-        return urlMapping.getOriginalUrl();
     }
 }
