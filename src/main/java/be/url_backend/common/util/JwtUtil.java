@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret.key}")
+    @Value("${jwt.secret.key:${jwt.secret:${JWT_SECRET_KEY:dGVzdHNlY3JldGtleWZvcnVybHNob3J0ZW5lcmFwcGxpY2F0aW9udGVzdGluZ3B1cnBvc2VzMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=}}}")
     private String secret;
 
     public String getUsernameFromToken(String token) {
