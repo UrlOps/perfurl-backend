@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "url_stats")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DailyStats {
@@ -18,13 +19,13 @@ public class DailyStats {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "url_mapping_id", nullable = false)
+    @JoinColumn(name = "url_id", nullable = false)
     private UrlMapping urlMapping;
 
-    @Column(nullable = false)
+    @Column(name = "stat_date", nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(name = "total_clicks", nullable = false)
     private long clickCount;
 
     public DailyStats(UrlMapping urlMapping, LocalDate date) {

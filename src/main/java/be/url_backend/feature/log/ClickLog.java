@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "click_log", indexes = {
+@Table(name = "click_logs", indexes = {
         @Index(name = "idx_ip_created", columnList = "ipAddress, createdAt"),
 })
 public class ClickLog extends BaseTimeEntity {
@@ -20,7 +20,7 @@ public class ClickLog extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "url_mapping_id", nullable = false)
+    @JoinColumn(name = "url_id", nullable = false)
     private UrlMapping urlMapping;
 
     @Column(nullable = false)
@@ -28,10 +28,15 @@ public class ClickLog extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String ipAddress;
+    @Column
+    private String referer;
 
-    public ClickLog(UrlMapping urlMapping, String userAgent, String ipAddress) {
+
+    public ClickLog(UrlMapping urlMapping, String userAgent, String ipAddress, String referer) {
         this.urlMapping = urlMapping;
         this.userAgent = userAgent;
         this.ipAddress = ipAddress;
+        this.referer = referer;
+
     }
 }
