@@ -3,8 +3,6 @@ package be.url_backend.feature.stats.repository;
 import be.url_backend.feature.stats.DailyStatsDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static be.url_backend.feature.stats.QDailyStats.dailyStats;
+import static be.url_backend.feature.url.QUrlMapping.urlMapping;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,20 +25,23 @@ public class DailyStateRepositoryCustomImpl implements DailyStateRepositoryCusto
 
     @Override
     public Page<DailyStatsDto> searchDailyStats(Pageable pageable, LocalDate startDate, LocalDate endDate) {
-        StringTemplate formattedDate = Expressions.stringTemplate(
-                "FUNCTION('DATE_FORMAT', {0}, {1})",
-                dailyStats.date,
-                "%Y-%m-%d"
-        );
+        return searchDailyStats(pageable, null, startDate, endDate);
+    }
 
+    @Override
+    public Page<DailyStatsDto> searchDailyStats(Pageable pageable, String shortKey, LocalDate startDate, LocalDate endDate) {
         List<DailyStatsDto> content = queryFactory
                 .select(Projections.constructor(DailyStatsDto.class,
                         dailyStats.id,
-                        formattedDate,
+                        urlMapping.shortKey,
+                        urlMapping.originalUrl,
+                        dailyStats.date,
                         dailyStats.clickCount
                 ))
                 .from(dailyStats)
+                .join(dailyStats.urlMapping, urlMapping)
                 .where(
+                        shortKeyEq(shortKey),
                         dateGoe(startDate),
                         dateLoe(endDate)
                 )
@@ -51,12 +53,18 @@ public class DailyStateRepositoryCustomImpl implements DailyStateRepositoryCusto
         JPAQuery<Long> countQuery = queryFactory
                 .select(dailyStats.count())
                 .from(dailyStats)
+                .join(dailyStats.urlMapping, urlMapping)
                 .where(
+                        shortKeyEq(shortKey),
                         dateGoe(startDate),
                         dateLoe(endDate)
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression shortKeyEq(String shortKey) {
+        return (shortKey != null && !shortKey.isBlank()) ? urlMapping.shortKey.eq(shortKey) : null;
     }
 
     private BooleanExpression dateGoe(LocalDate startDate) {

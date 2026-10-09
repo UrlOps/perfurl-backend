@@ -42,6 +42,21 @@ public class Base62Utils {
     }
 
     /**
+     * long 타입의 숫자를 지정된 최소 길이를 가진 Base62 문자열로 인코딩합니다.
+     * 부족한 자릿수는 앞자리를 0에 해당하는 첫 번째 문자로 패딩합니다.
+     * @param number 인코딩할 숫자
+     * @param minLength 최소 문자열 길이
+     * @return 패딩된 Base62 문자열
+     */
+    public static String encodeWithPadding(long number, int minLength) {
+        String encoded = encode(number);
+        if (encoded.length() >= minLength) {
+            return encoded;
+        }
+        return String.valueOf(BASE62_CHARS[0]).repeat(minLength - encoded.length()) + encoded;
+    }
+
+    /**
      * Base62 문자열을 long 타입의 숫자로 디코딩합니다.
      * @param str 디코딩할 Base62 문자열
      * @return 디코딩된 숫자

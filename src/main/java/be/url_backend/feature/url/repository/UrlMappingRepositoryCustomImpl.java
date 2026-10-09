@@ -31,7 +31,7 @@ public class UrlMappingRepositoryCustomImpl implements UrlMappingRepositoryCusto
                         urlMapping.shortKey,
                         urlMapping.originalUrl,
                         urlMapping.createdAt,
-                        urlMapping.expireAt
+                        urlMapping.expiresAt
                 ))
                 .from(urlMapping)
                 .where(

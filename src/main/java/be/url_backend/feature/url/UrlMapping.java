@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "url_mappings")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UrlMapping extends BaseTimeEntity {
@@ -28,7 +29,7 @@ public class UrlMapping extends BaseTimeEntity {
     private String originalUrl;
 
     @Column(nullable = false)
-    private LocalDateTime expireAt;
+    private LocalDateTime expiresAt;
 
     @OneToMany(mappedBy = "urlMapping", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClickLog> clickLogs = new ArrayList<>();
@@ -39,7 +40,7 @@ public class UrlMapping extends BaseTimeEntity {
     public static UrlMapping createUrlMapping(String originalUrl) {
         UrlMapping urlMapping = new UrlMapping();
         urlMapping.originalUrl = originalUrl;
-        urlMapping.expireAt = LocalDateTime.now().plusYears(1); // 기본 만료 기간 1년
+        urlMapping.expiresAt = LocalDateTime.now().plusYears(1); // 기본 만료 기간 1년
         return urlMapping;
     }
 

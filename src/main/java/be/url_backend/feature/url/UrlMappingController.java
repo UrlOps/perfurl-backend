@@ -2,6 +2,7 @@ package be.url_backend.feature.url;
 
 import be.url_backend.common.dto.ResponseText;
 import be.url_backend.common.dto.ApiResponse;
+import be.url_backend.feature.log.ClickLogService;
 import be.url_backend.feature.url.dto.UrlCreateRequestDto;
 import be.url_backend.feature.url.dto.UrlResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,14 +18,8 @@ import java.net.URI;
 public class UrlMappingController {
 
     private final UrlMappingService urlMappingService;
+    private final ClickLogService clickLogService;
 
-    /**
-     * 단축 URL 생성 API
-     *
-     * @param request            단축할 URL을 포함한 요청 DTO
-     * @param httpServletRequest Base URL 생성을 위한 요청 객체
-     * @return 생성된 단축 URL 정보를 담은 ApiResponse
-     */
     @PostMapping("/api/urls")
     public ResponseEntity<ApiResponse<UrlResponseDto>> createShortUrl(
             @RequestBody UrlCreateRequestDto request, HttpServletRequest httpServletRequest) {
@@ -37,20 +32,13 @@ public class UrlMappingController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    /**
-     * 단축 URL 리디렉션 API
-     * 단축 URL을 원본 URL로 리디렉션하고, 클릭 정보를 기록합니다.
-     *
-     * @param shortKey 리디렉션할 단축 URL 키
-     * @param request  HTTP 요청 객체 (클릭 로그 기록에 사용)
-     * @return 원본 URL로 리디렉션 응답
-     */
     @GetMapping("/r/{shortKey}")
     public ResponseEntity<Void> redirectToOriginalUrl(
             @PathVariable String shortKey, HttpServletRequest request) {
-        String originalUrl = urlMappingService.getOriginalUrlAndLogClick(shortKey, request);
+        UrlMapping urlMapping = urlMappingService.getUrlMapping(shortKey);
+        clickLogService.logClickAndupdateDailyStats(urlMapping, request.getHeader("User-Agent"), request.getRemoteAddr(), request.getHeader("Referer"));
         return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(originalUrl))
+                .location(URI.create(urlMapping.getOriginalUrl()))
                 .build();
     }
 

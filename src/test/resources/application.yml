@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: url_backend-test
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+    show-sql: false
+    open-in-view: false
+
+jwt:
+  secret:
+    key: dGVzdHNlY3JldGtleWZvcnVybHNob3J0ZW5lcmFwcGxpY2F0aW9udGVzdGluZ3B1cnBvc2VzMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=
+  expiration-time: 3600000
